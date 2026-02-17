@@ -1,0 +1,232 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "resource-layout-blocks-2/container",
+  "title": "Container",
+  "category": "resource-layout-blocks-2",
+  "description": "A Container/Wrapper; fluid or fixed width. By default, Containers get padding on both sides; half of the gutter value - usually 12px.",
+  "keywords": [ "container", "wrapper" ],
+  "version": "2.0.0",
+  "textdomain": "resource",
+  "icon": "screenoptions",
+  "attributes": {
+    "isFluid": {
+      "type": "boolean",
+      "default": true
+    },
+    "tagName": {
+      "type": "string",
+      "default": "div"
+    },
+    "inlineStyles": {
+      "type": "string"
+    },
+    "baseDisplay": {
+      "type": "string"
+    },
+    "baseAlignText": {
+      "type": "string"
+    },
+    "baseFlexDirection": {
+      "type": "string"
+    },
+    "baseFillGrowShrink": {
+      "type": "string"
+    },
+    "baseWrap": {
+      "type": "string"
+    },
+    "baseOrder": {
+      "type": "string"
+    },
+    "baseAlignContent": {
+      "type": "string"
+    },
+    "baseAlignItems": {
+      "type": "string"
+    },
+    "baseAlignSelf": {
+      "type": "string"
+    },
+    "baseJustifyContent": {
+      "type": "string"
+    },
+    "smDisplay": {
+      "type": "string"
+    },
+    "smAlignText": {
+      "type": "string"
+    },
+    "smFlexDirection": {
+      "type": "string"
+    },
+    "smFillGrowShrink": {
+      "type": "string"
+    },
+    "smWrap": {
+      "type": "string"
+    },
+    "smOrder": {
+      "type": "string"
+    },
+    "smAlignContent": {
+      "type": "string"
+    },
+    "smAlignItems": {
+      "type": "string"
+    },
+    "smAlignSelf": {
+      "type": "string"
+    },
+    "smJustifyContent": {
+      "type": "string"
+    },
+    "mdDisplay": {
+      "type": "string"
+    },
+    "mdAlignText": {
+      "type": "string"
+    },
+    "mdFlexDirection": {
+      "type": "string"
+    },
+    "mdFillGrowShrink": {
+      "type": "string"
+    },
+    "mdWrap": {
+      "type": "string"
+    },
+    "mdOrder": {
+      "type": "string"
+    },
+    "mdAlignContent": {
+      "type": "string"
+    },
+    "mdAlignItems": {
+      "type": "string"
+    },
+    "mdAlignSelf": {
+      "type": "string"
+    },
+    "mdJustifyContent": {
+      "type": "string"
+    },
+    "lgDisplay": {
+      "type": "string"
+    },
+    "lgAlignText": {
+      "type": "string"
+    },
+    "lgFlexDirection": {
+      "type": "string"
+    },
+    "lgFillGrowShrink": {
+      "type": "string"
+    },
+    "lgWrap": {
+      "type": "string"
+    },
+    "lgOrder": {
+      "type": "string"
+    },
+    "lgAlignContent": {
+      "type": "string"
+    },
+    "lgAlignItems": {
+      "type": "string"
+    },
+    "lgAlignSelf": {
+      "type": "string"
+    },
+    "lgJustifyContent": {
+      "type": "string"
+    },
+    "xlDisplay": {
+      "type": "string"
+    },
+    "xlAlignText": {
+      "type": "string"
+    },
+    "xlFlexDirection": {
+      "type": "string"
+    },
+    "xlFillGrowShrink": {
+      "type": "string"
+    },
+    "xlWrap": {
+      "type": "string"
+    },
+    "xlOrder": {
+      "type": "string"
+    },
+    "xlAlignContent": {
+      "type": "string"
+    },
+    "xlAlignItems": {
+      "type": "string"
+    },
+    "xlAlignSelf": {
+      "type": "string"
+    },
+    "xlJustifyContent": {
+      "type": "string"
+    },
+    "xxlDisplay": {
+      "type": "string"
+    },
+    "xxlAlignText": {
+      "type": "string"
+    },
+    "xxlFlexDirection": {
+      "type": "string"
+    },
+    "xxlFillGrowShrink": {
+      "type": "string"
+    },
+    "xxlWrap": {
+      "type": "string"
+    },
+    "xxlOrder": {
+      "type": "string"
+    },
+    "xxlAlignContent": {
+      "type": "string"
+    },
+    "xxlAlignItems": {
+      "type": "string"
+    },
+    "xxlAlignSelf": {
+      "type": "string"
+    },
+    "xxlJustifyContent": {
+      "type": "string"
+    }
+  },
+  "supports": {
+    "anchor": true,
+    "alignWide": false,
+    "background": {
+      "backgroundImage": true,
+      "backgroundSize": true
+    },
+    "color": {
+      "text": false,
+      "background": true
+    },
+    "dimensions": {
+      "aspectRatio": true,
+      "height": true,
+      "minHeight": true,
+      "width": true
+    },
+    "html": false,
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css",
+  "editorStyle": "file:./editor.css"
+}

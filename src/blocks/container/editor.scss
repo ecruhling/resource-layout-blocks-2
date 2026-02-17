@@ -1,0 +1,45 @@
+/**
+ * Editor only styles.
+ */
+
+[data-type="resource-layout-blocks-2/container"] {
+  outline: 1px dashed rgba(#f00, 0.25);
+
+  // 'Collapses' the inner blocks so that .container > .row works properly.
+  > .block-editor-inner-blocks {
+    display: contents;
+
+    /* stylelint-disable-next-line */
+    > .block-editor-block-list__layout {
+      display: contents;
+    }
+  }
+
+  // background on hover to make it visible
+  &:not(.is-selected):not(.has-child-selected):hover,
+  &.is-selected {
+    outline: 1px dashed #f00;
+  }
+}
+
+// TODO: move the below to a global editor stylesheet
+
+/* Tab label wrapper so we can position a dot above it */
+.resource-bp-tabs .resource-tab-label {
+  position: relative;
+  display: inline-block;
+  padding-top: 7px; /* room for the dot */
+}
+
+/* The “modified” indicator dot */
+.resource-bp-tabs .resource-tab-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.75;
+}
