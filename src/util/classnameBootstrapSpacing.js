@@ -17,6 +17,7 @@ function tokenize(className = "") {
 function parseToken(raw) {
 	const token = String(raw || "").toLowerCase();
 	const parts = token.split("-");
+
 	if (parts.length !== 2 && parts.length !== 3) return null;
 
 	const head = parts[0]; // "p", "ps", "mb", "px", etc.
@@ -31,10 +32,16 @@ function parseToken(raw) {
 	const bp = parts.length === 3 ? parts[1] : "";
 	if (!BS_BREAKPOINTS.includes(bp)) return null;
 
-	const val = parts.length === 3 ? parts[2] : parts[1]; // '0'..'5' or 'auto'
-	if (val === "auto") return type === "m" ? "auto" : null;
+	const valRaw = parts.length === 3 ? parts[2] : parts[1]; // '0'..'5' or 'auto'
 
-	const n = Number(val);
+	// Handle auto (margin only)
+	if (valRaw === "auto") {
+		if (type !== "m") return null; // padding-auto is invalid
+		return { type, side, bp, val: "auto" };
+	}
+
+	// Handle numeric 0..5
+	const n = Number(valRaw);
 	if (!Number.isFinite(n) || n < 0 || n > 5) return null;
 
 	return { type, side, bp, val: String(n) };
@@ -52,10 +59,11 @@ function makeToken(type, side, bp, val) {
 /**
  * Parse Bootstrap spacing from className into a structure that mirrors the Inspector.
  *
- * IMPORTANT RULE:
+ * RULES:
  * - p-* / m-* apply to all sides (t,b,s,e) in the Inspector.
  * - px-* / mx-* apply to s,e
  * - py-* / my-* apply to t,b
+ * - auto is supported for margin only, and behaves the same way as numeric
  */
 export function parseBootstrapSpacingFromClassName(className = "") {
 	const emptyBpMap = () =>
@@ -141,10 +149,8 @@ export function updateBootstrapSpacingSlot(className = "", slot, value) {
 	const tokens = tokenize(className);
 
 	const kept = tokens.filter((t) => {
-		if (!isSpacingToken(t)) return true;
-
 		const p = parseToken(t);
-		if (!p) return true;
+		if (!p) return true; // keep non-spacing tokens (and any invalid tokens)
 
 		// different type/bp -> keep
 		if (p.type !== type || p.bp !== bp) return true;

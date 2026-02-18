@@ -57,6 +57,16 @@ function buildBlockCss(block, outDir) {
     compileScss(editorIn, path.join(outDir, "editor.css"));
 }
 
+function buildGlobalEditorCss() {
+	const inFile = path.join(root, "src/editor.scss");
+	const outFile = path.join(dist, "editor.css");
+
+	ensureDir(dist);
+
+	const ok = compileScss(inFile, outFile);
+	if (!ok) console.warn(`[WARN] Missing global editor.scss: ${inFile}`);
+}
+
 async function buildBlockJs(block, outDir, emptyOutDir) {
     await build({
         configFile: path.join(root, "vite.block.config.js"),
@@ -95,7 +105,10 @@ async function rebuildBlock(block, { clean = false } = {}) {
 
 async function buildAll() {
     ensureDir(dist);
-    for (const b of blocks) {
+
+	buildGlobalEditorCss();
+
+	for (const b of blocks) {
         await rebuildBlock(b, { clean: true });
     }
 }
@@ -125,7 +138,8 @@ function blockFromFile(filePath) {
     await buildAll();
 
     const watchGlobs = [
-        path.join(root, "src/blocks/**/index.jsx"),
+		path.join(root, "src/editor.scss"),
+		path.join(root, "src/blocks/**/index.jsx"),
         path.join(root, "src/blocks/**/block.json"),
         path.join(root, "src/blocks/**/style.scss"),
         path.join(root, "src/blocks/**/editor.scss"),
@@ -136,11 +150,19 @@ function blockFromFile(filePath) {
         ignoreInitial: true,
     });
 
-    watcher.on("all", (event, filePath) => {
-        const b = blockFromFile(filePath);
-        console.log(`[dev] ${event}: ${path.relative(root, filePath)} → ${b}`);
-        scheduleRebuild(b);
-    });
+	watcher.on("all", (event, filePath) => {
+		const rel = path.relative(root, filePath);
+
+		if (rel === "src/editor.scss") {
+			buildGlobalEditorCss();
+			console.log("[dev] rebuilt global editor.css");
+			return;
+		}
+
+		const b = blockFromFile(filePath);
+		console.log(`[dev] ${event}: ${rel} → ${b}`);
+		scheduleRebuild(b);
+	});
 
     console.log("[dev] watching block sources…");
 })();

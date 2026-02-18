@@ -46,6 +46,23 @@ function resource_layout_blocks_init() {
 add_action( 'init', __NAMESPACE__ . '\resource_layout_blocks_init' );
 
 /**
+ * Register editor.css (Block Editor styles only).
+ */
+add_action('enqueue_block_editor_assets', function () {
+	$css_path = __DIR__ . '/dist/editor.css';
+	if ( ! file_exists( $css_path ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'resource-layout-blocks-2-editor-styles',
+		plugins_url('dist/editor.css', __FILE__),
+		array(),
+		filemtime($css_path)
+	);
+});
+
+/**
  * Register Resource Layout Blocks category.
  *
  * @param array $block_categories Array of categories for block types.

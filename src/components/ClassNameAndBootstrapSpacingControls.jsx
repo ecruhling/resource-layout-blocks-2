@@ -111,7 +111,7 @@ export default function ClassNameAndBootstrapSpacingControls({className, setClas
                             maxWidth: 520,
                         }}
                     >
-                        <span style={{fontSize: 10, whiteSpace: "nowrap"}}>classes</span>
+                        <span style={{fontSize: 11, whiteSpace: "nowrap"}}>.cx</span>
                         <div style={{minWidth: 250, maxWidth: 500}}>
                             <TextControl value={className || ""} onChange={(v) => setClassName(v)}/>
                         </div>

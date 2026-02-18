@@ -67,6 +67,16 @@ function buildBlockCss(block, outDir) {
     }
 }
 
+function buildGlobalEditorCss() {
+	const inFile = path.join(root, "src/editor.scss");
+	const outFile = path.join(dist, "editor.css");
+
+	ensureDir(dist);
+
+	const ok = compileScss(inFile, outFile);
+	if (!ok) console.warn(`[WARN] Missing global editor.scss: ${inFile}`);
+}
+
 async function buildBlockJs(block, outDir) {
     await build({
         configFile: path.join(root, "vite.block.config.js"),
@@ -99,7 +109,10 @@ async function buildBlock(block) {
 
 (async () => {
     ensureDir(dist);
-    for (const b of blocks) {
+
+	buildGlobalEditorCss();
+
+	for (const b of blocks) {
         await buildBlock(b);
     }
 })();
