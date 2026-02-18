@@ -3,22 +3,23 @@
  */
 import {__} from '@wordpress/i18n';
 import {InnerBlocks, InspectorControls, useBlockProps,} from '@wordpress/block-editor';
-import {Card, CardBody, CardHeader, CheckboxControl, Flex, FlexItem, SelectControl,} from '@wordpress/components';
-
-/**
- * External dependencies
- */
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	CheckboxControl,
+	Flex,
+	FlexItem,
+	SelectControl,
+	TextControl,
+} from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import {tagNameMessages} from '../../help/tagNameMessages';
-// import DisplayControl from '../../block-controls/displayControl';
-// import PaddingControl from '../../block-controls/paddingControl';
-// import MarginControl from '../../block-controls/marginControl';
-// import AlignControl from '../../block-controls/alignControl';
-// import FlexControl from '../../block-controls/flexControl';
 import ClassNameAndBootstrapSpacingControls from "../../components/ClassNameAndBootstrapSpacingControls";
+import {convertStylesStringToObject} from "../../util/convertStylesStringToObject.js";
 
 const ALLOWED = ["resource-layout-blocks-2/row"];
 const TEMPLATE = [["resource-layout-blocks-2/row", {}, [["resource-layout-blocks-2/column"], ["resource-layout-blocks-2/column"]]]];
@@ -29,89 +30,7 @@ export default ({attributes, setAttributes}) => {
 		isFluid = true,
 		tagName: TagName = 'div',
 		inlineStyles,
-		baseDisplay,
-		baseAlignText,
-		baseFlexDirection,
-		baseFillGrowShrink,
-		baseWrap,
-		baseOrder,
-		baseAlignContent,
-		baseAlignItems,
-		baseAlignSelf,
-		baseJustifyContent,
-		smDisplay,
-		smAlignText,
-		smFlexDirection,
-		smFillGrowShrink,
-		smWrap,
-		smOrder,
-		smAlignContent,
-		smAlignItems,
-		smAlignSelf,
-		smJustifyContent,
-		mdDisplay,
-		mdAlignText,
-		mdFlexDirection,
-		mdFillGrowShrink,
-		mdWrap,
-		mdOrder,
-		mdAlignContent,
-		mdAlignItems,
-		mdAlignSelf,
-		mdJustifyContent,
-		lgDisplay,
-		lgAlignText,
-		lgFlexDirection,
-		lgFillGrowShrink,
-		lgWrap,
-		lgOrder,
-		lgAlignContent,
-		lgAlignItems,
-		lgAlignSelf,
-		lgJustifyContent,
-		xlDisplay,
-		xlAlignText,
-		xlFlexDirection,
-		xlFillGrowShrink,
-		xlWrap,
-		xlOrder,
-		xlAlignContent,
-		xlAlignItems,
-		xlAlignSelf,
-		xlJustifyContent,
-		xxlDisplay,
-		xxlAlignText,
-		xxlFlexDirection,
-		xxlFillGrowShrink,
-		xxlWrap,
-		xxlOrder,
-		xxlAlignContent,
-		xxlAlignItems,
-		xxlAlignSelf,
-		xxlJustifyContent,
 	} = attributes;
-
-	// const classNameAttributes = omit(attributes, [
-	//     'anchor',
-	//     'isFluid',
-	//     'tagName',
-	//     'inlineStyles',
-	//     'className',
-	// ]);
-
-	// const classes = classnames(
-	//     {
-	//         container: !isFluid,
-	//         'container-fluid': isFluid,
-	//     },
-	//     Object.values(classNameAttributes),
-	//     className
-	// );
-
-	// const blockProps = useBlockProps({
-	//     className: classes,
-	//     style: convertStylesStringToObject(inlineStyles),
-	// });
 
 	const setClassName = (next) => setAttributes({className: next});
 
@@ -119,6 +38,7 @@ export default ({attributes, setAttributes}) => {
 
 	const blockProps = useBlockProps({
 		className: `${containerClass} resource-layout-blocks-2-container ${className}`.trim(),
+		style: convertStylesStringToObject(inlineStyles),
 	});
 
 	return (
@@ -179,6 +99,20 @@ export default ({attributes, setAttributes}) => {
 				</Card>
 			</InspectorControls>
 			<ClassNameAndBootstrapSpacingControls className={className} setClassName={setClassName}/>
+			<InspectorControls group="advanced">
+				<TextControl
+					__nextHasNoMarginBottom
+					className="inline-style-control"
+					autoComplete="off"
+					label={__('Inline Styles')}
+					value={inlineStyles || ''}
+					onChange={(value) => {
+						setAttributes({
+							inlineStyles: value !== '' ? value : undefined,
+						});
+					}}
+				/>
+			</InspectorControls>
 			<TagName {...blockProps}>
 				<InnerBlocks allowedBlocks={ALLOWED} template={TEMPLATE} templateLock={false}/>
 			</TagName>
