@@ -179,9 +179,9 @@ export default ({attributes, setAttributes}) => {
 				</Card>
 			</InspectorControls>
 			<ClassNameAndBootstrapSpacingControls className={className} setClassName={setClassName}/>
-			<div {...blockProps}>
+			<TagName {...blockProps}>
 				<InnerBlocks allowedBlocks={ALLOWED} template={TEMPLATE} templateLock={false}/>
-			</div>
+			</TagName>
 		</>
 	);
 };

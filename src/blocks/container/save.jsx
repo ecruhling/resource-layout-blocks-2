@@ -1,7 +1,11 @@
 import {InnerBlocks, useBlockProps} from "@wordpress/block-editor";
 
 export default ({attributes}) => {
-	const {className = "", isFluid = true} = attributes;
+	const {
+		className = "",
+		isFluid = true,
+		tagName: TagName = 'div',
+	} = attributes;
 
 	const containerClass = isFluid ? "container-fluid" : "container";
 
@@ -10,8 +14,8 @@ export default ({attributes}) => {
 	});
 
 	return (
-		<div {...blockProps}>
+		<TagName {...blockProps}>
 			<InnerBlocks.Content/>
-		</div>
+		</TagName>
 	);
 };
