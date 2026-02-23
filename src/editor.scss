@@ -1,33 +1,84 @@
-/* Global editor-only styling for your layout blocks UI */
+/* Global editor-only styling for the layout blocks UI */
 
-/* Shrink the inline TextControl inside the toolbar */
-.resource-toolbar-classes .components-base-control,
-.resource-toolbar-classes .components-base-control__field {
-	margin-bottom: 0;
+/*
+.cx field inside the block toolbar
+*/
+.resource-toolbar-classes {
+	.components-base-control,
+	.components-base-control__field {
+		margin-bottom: 0;
+	}
+
+	input.components-text-control__input {
+		font-size: 11px;
+		height: 28px;
+		min-height: 28px;
+		padding: 2px 5px;
+	}
 }
 
-.resource-toolbar-classes input.components-text-control__input {
-	font-size: 11px;
-	height: 28px;
-	min-height: 28px;
-	padding: 2px 5px;
+/*
+SM, MD, LG, etc, tabs
+ */
+.resource-bp-tabs {
+	.components-tab-panel__tabs {
+		justify-content: space-between;
+	}
+
+	.components-tab-panel__tabs-item {
+		padding: 3px 14px;
+	}
+
+	.resource-tab-label {
+		position: relative;
+		display: inline-block;
+		padding-top: 7px;
+		font-size: 11px;
+	}
+
+	.resource-tab-dot {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 6px;
+		height: 6px;
+		border-radius: 999px;
+		background: #a20e0e;
+	}
+
+	.resource-panel-body {
+		margin-top: 0 !important;
+
+		> h2 {
+			margin-bottom: 0 !important;
+		}
+
+		&.is-opened {
+			padding-bottom: 0;
+		}
+	}
+
+	.components-panel__row {
+		margin-left: -16px;
+		margin-right: -16px;
+	}
+
+	.components-card {
+		width: 100%;
+	}
 }
 
-/* Tab label wrapper so we can position a dot above it */
-.resource-bp-tabs .resource-tab-label {
-	position: relative;
-	display: inline-block;
-	padding-top: 7px; /* room for the dot */
+.resource-panel-title {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
 
-/* The “modified” indicator dot */
-.resource-bp-tabs .resource-tab-dot {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	transform: translateX(-50%);
+.resource-panel-dot {
 	width: 6px;
 	height: 6px;
 	border-radius: 999px;
-	background: #a20e0e;
+	background: currentColor;
+	opacity: 0.75;
 }

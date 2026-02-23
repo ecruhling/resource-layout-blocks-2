@@ -19,7 +19,9 @@ import {
  */
 import {tagNameMessages} from '../../help/tagNameMessages';
 import ClassNameAndBootstrapSpacingControls from "../../components/ClassNameAndBootstrapSpacingControls";
-import {convertStylesStringToObject} from "../../util/convertStylesStringToObject.js";
+import BootstrapTextAlignControls from "../../components/BootstrapTextAlignControls";
+import {convertStylesStringToObject} from "../../utils/convertStylesStringToObject.js";
+import ClassNameAndBootstrapControls from "../../components/ClassNameAndBootstrapControls.jsx";
 
 const ALLOWED = ["resource-layout-blocks-2/row"];
 const TEMPLATE = [["resource-layout-blocks-2/row", {}, [["resource-layout-blocks-2/column"], ["resource-layout-blocks-2/column"]]]];
@@ -98,7 +100,9 @@ export default ({attributes, setAttributes}) => {
 					</CardBody>
 				</Card>
 			</InspectorControls>
-			<ClassNameAndBootstrapSpacingControls className={className} setClassName={setClassName}/>
+			<ClassNameAndBootstrapControls className={className} setClassName={setClassName} />
+			{/*<ClassNameAndBootstrapSpacingControls className={className} setClassName={setClassName}/>*/}
+			{/*<BootstrapTextAlignControls className={className} setClassName={setClassName} />*/}
 			<InspectorControls group="advanced">
 				<TextControl
 					__nextHasNoMarginBottom

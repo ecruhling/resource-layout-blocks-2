@@ -1,5 +1,5 @@
 import {InnerBlocks, useBlockProps} from "@wordpress/block-editor";
-import {convertStylesStringToObject} from "../../util/convertStylesStringToObject.js";
+import {convertStylesStringToObject} from "../../utils/convertStylesStringToObject.js";
 
 export default ({attributes}) => {
 	const {

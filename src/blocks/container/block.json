@@ -34,16 +34,16 @@
       "background": true
     },
     "dimensions": {
-      "aspectRatio": true,
-      "height": true,
-      "minHeight": true,
-      "width": true
+      "aspectRatio": false,
+      "height": false,
+      "minHeight": false,
+      "width": false
     },
     "html": false,
     "spacing": {
-      "margin": true,
-      "padding": true,
-      "blockGap": true
+      "margin": false,
+      "padding": false,
+      "blockGap": false
     }
   },
   "editorScript": "file:./index.js",
