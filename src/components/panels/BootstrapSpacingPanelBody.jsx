@@ -8,14 +8,16 @@ import {
 	PanelBody,
 	PanelRow,
 	SelectControl,
-	VisuallyHidden,
 } from "@wordpress/components";
 
 import { sidesBottom, sidesLeft, sidesRight, sidesTop } from "@wordpress/icons";
+import PanelTitleWithClear from "./PanelTitleWithClear";
 
 const NONE = { label: "— none —", value: "" };
 const PAD_VALUES = ["0", "1", "2", "3", "4", "5"].map((v) => ({ label: v, value: v }));
 const MAR_VALUES = [{ label: "auto", value: "auto" }, ...PAD_VALUES];
+const PADDING_OPTIONS = [NONE, ...PAD_VALUES];
+const MARGIN_OPTIONS = [NONE, ...MAR_VALUES];
 
 const DEFAULT_PADDING_CONTROLS = [
 	{ side: "t", label: "Padding Top (pt-*)", icon: sidesTop },
@@ -48,6 +50,7 @@ export default function BootstrapSpacingPanelBody({
 													  bpLabel,
 													  parsedSpacing,
 													  onChangeSpacing, // (type: 'p'|'m', side: 't'|'b'|'s'|'e', nextVal: string) => void
+													  onClearSpacing,
 													  paddingControls = DEFAULT_PADDING_CONTROLS,
 													  marginControls = DEFAULT_MARGIN_CONTROLS,
 													  panelBodyClassName = "resource-panel-body",
@@ -61,15 +64,12 @@ export default function BootstrapSpacingPanelBody({
 	return (
 		<PanelBody
 			title={
-				<span className="resource-panel-title">
-					Spacing
-					{isModified && (
-						<>
-							<span className="resource-panel-dot" aria-hidden="true" />
-							<VisuallyHidden>modified</VisuallyHidden>
-						</>
-					)}
-				</span>
+				<PanelTitleWithClear
+					title="Spacing"
+					isModified={isModified}
+					clearLabel={`Clear ${bpLabel} spacing`}
+					onClear={onClearSpacing}
+				/>
 			}
 			initialOpen={true}
 			className={panelBodyClassName}
@@ -97,7 +97,7 @@ export default function BootstrapSpacingPanelBody({
 										hideLabelFromVision
 										label={label}
 										value={getSpacingValue(parsedSpacing, "p", bp, side)}
-										options={[NONE, ...PAD_VALUES]}
+										options={PADDING_OPTIONS}
 										style={{ maxWidth: cellMaxWidth }}
 										onChange={(v) => onChangeSpacing("p", side, v)}
 									/>
@@ -127,7 +127,7 @@ export default function BootstrapSpacingPanelBody({
 										hideLabelFromVision
 										label={label}
 										value={getSpacingValue(parsedSpacing, "m", bp, side)}
-										options={[NONE, ...MAR_VALUES]}
+										options={MARGIN_OPTIONS}
 										style={{ maxWidth: cellMaxWidth }}
 										onChange={(v) => onChangeSpacing("m", side, v)}
 									/>

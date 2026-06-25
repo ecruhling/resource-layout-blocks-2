@@ -1,33 +1,12 @@
 import {useMemo} from "@wordpress/element";
 import {BlockControls, InspectorControls} from "@wordpress/block-editor";
 import {
-	Card,
-	CardBody,
-	CardHeader,
-	Flex,
-	FlexItem,
-	Icon,
 	Panel,
-	PanelBody,
-	PanelRow,
-	SelectControl,
 	TabPanel,
 	TextControl,
-	ToolbarButton,
 	ToolbarGroup,
 	VisuallyHidden,
 } from "@wordpress/components";
-
-import {
-	alignCenter,
-	alignLeft,
-	alignRight,
-	closeSmall,
-	sidesBottom,
-	sidesLeft,
-	sidesRight,
-	sidesTop,
-} from "@wordpress/icons";
 
 import {
 	BS_BREAKPOINTS,
@@ -40,10 +19,30 @@ import {
 	updateBootstrapTextAlignSlot,
 } from "../utils/classname-bootstrap-text-align";
 
+import {
+	parseBootstrapDisplayFromClassName,
+	updateBootstrapDisplaySlot,
+} from "../utils/classname-bootstrap-display";
+
+import {
+	parseBootstrapFlexFromClassName,
+	updateBootstrapFlexSlot,
+	clearBootstrapFlexBreakpoint,
+} from "../utils/classname-bootstrap-flex";
+
+import {
+	parseBootstrapFlexItemFromClassName,
+	updateBootstrapFlexItemSlot,
+	clearBootstrapFlexItemBreakpoint,
+} from "../utils/classname-bootstrap-flex-item";
+
 import {normalizeClassName} from "../utils/normalize-classname";
 
 import BootstrapSpacingPanelBody from "./panels/BootstrapSpacingPanelBody";
 import BootstrapAlignmentPanelBody from "./panels/BootstrapAlignmentPanelBody";
+import BootstrapDisplayPanelBody from "./panels/BootstrapDisplayPanelBody";
+import BootstrapFlexPanelBody from "./panels/BootstrapFlexPanelBody";
+import BootstrapFlexItemPanelBody from "./panels/BootstrapFlexItemPanelBody";
 
 const TABS = [
 	{name: "", label: "-"},
@@ -54,43 +53,28 @@ const TABS = [
 	{name: "xxl", label: "XXL"},
 ];
 
-const NONE = {label: "— none —", value: ""};
-const PAD_VALUES = ["0", "1", "2", "3", "4", "5"].map((v) => ({label: v, value: v}));
-const MAR_VALUES = [{label: "auto", value: "auto"}, ...PAD_VALUES];
+const SPACING_TYPES = ["p", "m"];
+const SPACING_SIDES = ["", "t", "b", "s", "e"];
+const FLEX_SETTINGS = ["direction", "wrap", "justify", "alignItems", "alignContent"];
+const FLEX_ITEM_SETTINGS = ["grow", "shrink", "alignSelf", "order"];
 
-const PADDING_CONTROLS = [
-	{side: "t", label: "Padding Top (pt-*)", icon: sidesTop},
-	{side: "e", label: "Padding End (pe-*)", icon: sidesRight},
-	{side: "b", label: "Padding Bottom (pb-*)", icon: sidesBottom},
-	{side: "s", label: "Padding Start (ps-*)", icon: sidesLeft},
-];
-
-const MARGIN_CONTROLS = [
-	{side: "t", label: "Margin Top (mt-*)", icon: sidesTop},
-	{side: "e", label: "Margin End (me-*)", icon: sidesRight},
-	{side: "b", label: "Margin Bottom (mb-*)", icon: sidesBottom},
-	{side: "s", label: "Margin Start (ms-*)", icon: sidesLeft},
-];
-
-function getSpacingValue(parsedSpacing, type, bp, side) {
-	return parsedSpacing?.[type]?.[bp]?.[side] ?? "";
+function hasValue(value) {
+	return value !== null && value !== undefined && value !== "";
 }
 
 function bpHasAnySpacing(parsedSpacing, bp) {
-	const types = ["p", "m"];
-	const sides = ["", "t", "b", "s", "e"];
-	for (const type of types) {
-		for (const side of sides) {
-			const v = parsedSpacing?.[type]?.[bp]?.[side];
-			if (v !== null && v !== undefined) return true; // includes '0' and 'auto'
-		}
-	}
-	return false;
+	return SPACING_TYPES.some((type) =>
+		SPACING_SIDES.some((side) => hasValue(parsedSpacing?.[type]?.[bp]?.[side]))
+	);
 }
 
 function bpHasTextAlign(alignMap, bp) {
-	const v = alignMap?.[bp];
-	return v !== null && v !== undefined && v !== "";
+	return hasValue(alignMap?.[bp]);
+}
+
+function bpHasAnySetting(map, bp, settings) {
+	const current = map?.[bp];
+	return !!current && settings.some((setting) => hasValue(current?.[setting]));
 }
 
 export default function ClassNameAndBootstrapControls({className, setClassName}) {
@@ -104,10 +88,29 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 		[className]
 	);
 
+	const displayMap = useMemo(
+		() => parseBootstrapDisplayFromClassName(className),
+		[className]
+	);
+
+	const flexMap = useMemo(
+		() => parseBootstrapFlexFromClassName(className),
+		[className]
+	);
+
+	const flexItemMap = useMemo(
+		() => parseBootstrapFlexItemFromClassName(className),
+		[className]
+	);
+
 	const tabsWithIndicators = useMemo(() => {
 		return TABS.map((t) => {
 			const modified =
-				bpHasAnySpacing(parsedSpacing, t.name) || bpHasTextAlign(alignMap, t.name);
+				bpHasAnySpacing(parsedSpacing, t.name) ||
+				bpHasTextAlign(alignMap, t.name) ||
+				!!displayMap?.[t.name] ||
+				bpHasAnySetting(flexMap, t.name, FLEX_SETTINGS) ||
+				bpHasAnySetting(flexItemMap, t.name, FLEX_ITEM_SETTINGS);
 
 			return {
 				name: t.name,
@@ -124,7 +127,7 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 				),
 			};
 		});
-	}, [parsedSpacing, alignMap]);
+	}, [parsedSpacing, alignMap, displayMap, flexMap, flexItemMap]);
 
 	const setSpacingSlot = (type, bp, side, nextVal) => {
 		const val = nextVal === "" ? null : nextVal;
@@ -134,6 +137,50 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 
 	const setTextAlignSlot = (bp, nextVal) => {
 		const next = updateBootstrapTextAlignSlot(className || "", bp, nextVal);
+		setClassName(normalizeClassName(next));
+	};
+
+	const setDisplaySlot = (bp, nextVal) => {
+		const next = updateBootstrapDisplaySlot(className || "", bp, nextVal);
+		setClassName(normalizeClassName(next));
+	};
+
+	const setFlexSlot = (bp, setting, nextVal) => {
+		const next = updateBootstrapFlexSlot(className || "", bp, setting, nextVal);
+		setClassName(normalizeClassName(next));
+	};
+
+	const setFlexItemSlot = (bp, setting, nextVal) => {
+		const next = updateBootstrapFlexItemSlot(className || "", bp, setting, nextVal);
+		setClassName(normalizeClassName(next));
+	};
+
+	const clearSpacingSlot = (bp) => {
+		let next = className || "";
+
+		next = updateBootstrapSpacingSlot(next, { type: "p", bp, side: "" }, null);
+		next = updateBootstrapSpacingSlot(next, { type: "m", bp, side: "" }, null);
+
+		setClassName(normalizeClassName(next));
+	};
+
+	const clearTextAlignSlot = (bp) => {
+		const next = updateBootstrapTextAlignSlot(className || "", bp, "");
+		setClassName(normalizeClassName(next));
+	};
+
+	const clearDisplaySlot = (bp) => {
+		const next = updateBootstrapDisplaySlot(className || "", bp, "");
+		setClassName(normalizeClassName(next));
+	};
+
+	const clearFlexSlot = (bp) => {
+		const next = clearBootstrapFlexBreakpoint(className || "", bp);
+		setClassName(normalizeClassName(next));
+	};
+
+	const clearFlexItemSlot = (bp) => {
+		const next = clearBootstrapFlexItemBreakpoint(className || "", bp);
 		setClassName(normalizeClassName(next));
 	};
 
@@ -174,20 +221,48 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 
 						const bpLabel = tab.name ? tab.name.toUpperCase() : "BASE";
 						const currentAlign = alignMap?.[bp] ?? ""; // 'start'|'center'|'end'|''
+						const currentDisplay = displayMap?.[bp] ?? "";
+						const currentFlex = flexMap?.[bp] ?? {};
+						const currentFlexItem = flexItemMap?.[bp] ?? {};
 
 						return (
-							<Panel>
+							<Panel key={bp || "base"}>
 								<BootstrapSpacingPanelBody
 									bp={bp}
 									bpLabel={bpLabel}
 									parsedSpacing={parsedSpacing}
 									onChangeSpacing={(type, side, v) => setSpacingSlot(type, bp, side, v)}
+									onClearSpacing={() => clearSpacingSlot(bp)}
 								/>
+
 								<BootstrapAlignmentPanelBody
 									bpLabel={bpLabel}
 									currentAlign={currentAlign}
 									onChangeAlign={(next) => setTextAlignSlot(bp, next)}
+									onClearAlign={() => clearTextAlignSlot(bp)}
 								/>
+
+								<BootstrapDisplayPanelBody
+									bpLabel={bpLabel}
+									currentDisplay={currentDisplay}
+									onChangeDisplay={(v) => setDisplaySlot(bp, v)}
+									onClearDisplay={() => clearDisplaySlot(bp)}
+								/>
+
+								<BootstrapFlexPanelBody
+									bpLabel={bpLabel}
+									currentFlex={currentFlex}
+									onChangeFlex={(setting, value) => setFlexSlot(bp, setting, value)}
+									onClearFlex={() => clearFlexSlot(bp)}
+								/>
+
+								<BootstrapFlexItemPanelBody
+									bpLabel={bpLabel}
+									currentFlexItem={currentFlexItem}
+									onChangeFlexItem={(setting, value) => setFlexItemSlot(bp, setting, value)}
+									onClearFlexItem={() => clearFlexItemSlot(bp)}
+								/>
+
 							</Panel>
 						);
 					}}

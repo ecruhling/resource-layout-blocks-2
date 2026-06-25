@@ -1,12 +1,15 @@
 import { registerBlockType } from "@wordpress/blocks";
 import { InnerBlocks, useBlockProps } from "@wordpress/block-editor";
 import metadata from "./block.json";
+import icons from "../../icons/icons.jsx";
 
-const ALLOWED = ["my-layout/column"];
-const TEMPLATE = [["my-layout/column"], ["my-layout/column"]];
+const COLUMN_BLOCK = "resource-layout-blocks-2/column";
+const ALLOWED = [COLUMN_BLOCK];
+const TEMPLATE = [[COLUMN_BLOCK], [COLUMN_BLOCK]];
 
 registerBlockType(metadata.name, {
     ...metadata,
+	icon: icons.row,
     edit() {
         const props = useBlockProps({ className: "my-layout-row" });
         return (

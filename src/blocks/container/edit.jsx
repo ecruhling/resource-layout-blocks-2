@@ -18,13 +18,20 @@ import {
  * Internal dependencies
  */
 import {tagNameMessages} from '../../help/tagNameMessages';
-import ClassNameAndBootstrapSpacingControls from "../../components/ClassNameAndBootstrapSpacingControls";
-import BootstrapTextAlignControls from "../../components/BootstrapTextAlignControls";
-import {convertStylesStringToObject} from "../../utils/convertStylesStringToObject.js";
+import {convertStylesStringToObject} from "../../utils/convert-styles-string-to-object.js";
 import ClassNameAndBootstrapControls from "../../components/ClassNameAndBootstrapControls.jsx";
 
 const ALLOWED = ["resource-layout-blocks-2/row"];
 const TEMPLATE = [["resource-layout-blocks-2/row", {}, [["resource-layout-blocks-2/column"], ["resource-layout-blocks-2/column"]]]];
+const TAG_NAME_OPTIONS = [
+	{label: __('Default (<div>)', 'resource'), value: 'div'},
+	{label: '<header>', value: 'header'},
+	{label: '<main>', value: 'main'},
+	{label: '<section>', value: 'section'},
+	{label: '<article>', value: 'article'},
+	{label: '<aside>', value: 'aside'},
+	{label: '<footer>', value: 'footer'},
+];
 
 export default ({attributes, setAttributes}) => {
 	const {
@@ -35,6 +42,11 @@ export default ({attributes, setAttributes}) => {
 	} = attributes;
 
 	const setClassName = (next) => setAttributes({className: next});
+	const setInlineStyles = (value) => {
+		setAttributes({
+			inlineStyles: value !== '' ? value : undefined,
+		});
+	};
 
 	const containerClass = isFluid ? "container-fluid" : "container";
 
@@ -61,27 +73,7 @@ export default ({attributes, setAttributes}) => {
 							<FlexItem>
 								<SelectControl
 									label={__('HTML element', 'resource')}
-									options={[
-										{
-											label: __(
-												'Default (<div>)',
-												'resource'
-											),
-											value: 'div',
-										},
-										{label: '<header>', value: 'header'},
-										{label: '<main>', value: 'main'},
-										{
-											label: '<section>',
-											value: 'section',
-										},
-										{
-											label: '<article>',
-											value: 'article',
-										},
-										{label: '<aside>', value: 'aside'},
-										{label: '<footer>', value: 'footer'},
-									]}
+									options={TAG_NAME_OPTIONS}
 									value={TagName}
 									onChange={(value) =>
 										setAttributes({tagName: value})
@@ -100,9 +92,7 @@ export default ({attributes, setAttributes}) => {
 					</CardBody>
 				</Card>
 			</InspectorControls>
-			<ClassNameAndBootstrapControls className={className} setClassName={setClassName} />
-			{/*<ClassNameAndBootstrapSpacingControls className={className} setClassName={setClassName}/>*/}
-			{/*<BootstrapTextAlignControls className={className} setClassName={setClassName} />*/}
+			<ClassNameAndBootstrapControls className={className} setClassName={setClassName}/>
 			<InspectorControls group="advanced">
 				<TextControl
 					__nextHasNoMarginBottom
@@ -110,11 +100,7 @@ export default ({attributes, setAttributes}) => {
 					autoComplete="off"
 					label={__('Inline Styles')}
 					value={inlineStyles || ''}
-					onChange={(value) => {
-						setAttributes({
-							inlineStyles: value !== '' ? value : undefined,
-						});
-					}}
+					onChange={setInlineStyles}
 				/>
 			</InspectorControls>
 			<TagName {...blockProps}>

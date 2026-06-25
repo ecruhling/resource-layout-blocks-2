@@ -23,7 +23,7 @@ const RESOURCE_LAYOUT_BLOCKS_2_SLUG = 'resource-layout-blocks-2';
 /**
  * Register the layout blocks
  */
-function resource_layout_blocks_init() {
+function resource_layout_blocks_init(): void {
 	$blocks_dir = __DIR__ . '/dist/blocks';
 	if ( ! is_dir( $blocks_dir ) ) {
 		return;

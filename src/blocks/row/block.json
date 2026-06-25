@@ -4,7 +4,6 @@
   "name": "resource-layout-blocks-2/row",
   "title": "Row",
   "category": "resource-layout-blocks-2",
-  "icon": "editor-alignleft",
   "description": "A row that holds columns.",
   "supports": {
     "html": false

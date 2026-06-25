@@ -1,20 +1,21 @@
 {
-  "name": "resource-layout-blocks-2",
-  "private": true,
-  "version": "2.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "node scripts/build.mjs",
-    "dev": "node scripts/dev.mjs"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.3",
-    "@wordpress/icons": "^11.6.0",
-    "chokidar": "^5.0.0",
-    "classnames": "^2.5.1",
-    "lodash": "^4.17.23",
-    "sass": "^1.97.3",
-    "vite": "^7.3.1",
-    "vite-plugin-static-copy": "^3.2.0"
-  }
+	"name": "resource-layout-blocks-2",
+	"private": true,
+	"version": "2.0.0",
+	"type": "module",
+	"scripts": {
+		"build": "node scripts/build.mjs",
+		"dev": "node scripts/dev.mjs"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-react": "^6.0.2",
+		"@wordpress/icons": "^11.6.0",
+		"@wordpress/prettier-config": "^4.47.0",
+		"chokidar": "^5.0.0",
+		"classnames": "^2.5.1",
+		"lodash": "^4.18.1",
+		"sass": "^1.100.0",
+		"vite": "^8.0.14",
+		"vite-plugin-static-copy": "^4.1.0"
+	}
 }

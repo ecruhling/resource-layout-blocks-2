@@ -6,15 +6,22 @@ import {
 	PanelRow,
 	ToolbarButton,
 	ToolbarGroup,
-	VisuallyHidden,
 } from "@wordpress/components";
 
 import { alignCenter, alignLeft, alignRight, closeSmall } from "@wordpress/icons";
+import PanelTitleWithClear from "./PanelTitleWithClear";
+
+const ALIGNMENT_CONTROLS = [
+	{ value: "start", icon: alignLeft, label: "Align start" },
+	{ value: "center", icon: alignCenter, label: "Align center" },
+	{ value: "end", icon: alignRight, label: "Align end" },
+];
 
 export default function BootstrapAlignmentPanelBody({
 														bpLabel,
 														currentAlign, // 'start'|'center'|'end'|''
 														onChangeAlign, // (nextAlign: 'start'|'center'|'end'|'') => void
+														onClearAlign,
 														panelBodyClassName = "resource-panel-body",
 														cardHeaderClassName = "resource-card-header",
 													}) {
@@ -23,15 +30,12 @@ export default function BootstrapAlignmentPanelBody({
 	return (
 		<PanelBody
 			title={
-				<span className="resource-panel-title">
-					Alignment
-					{isModified && (
-						<>
-							<span className="resource-panel-dot" aria-hidden="true" />
-							<VisuallyHidden>modified</VisuallyHidden>
-						</>
-					)}
-				</span>
+				<PanelTitleWithClear
+					title="Alignment"
+					isModified={isModified}
+					clearLabel={`Clear ${bpLabel} alignment`}
+					onClear={onClearAlign}
+				/>
 			}
 			initialOpen={false}
 			className={panelBodyClassName}
@@ -50,24 +54,15 @@ export default function BootstrapAlignmentPanelBody({
 
 					<CardBody size="small">
 						<ToolbarGroup>
-							<ToolbarButton
-								icon={alignLeft}
-								label="Align start"
-								isPressed={currentAlign === "start"}
-								onClick={() => onChangeAlign(currentAlign === "start" ? "" : "start")}
-							/>
-							<ToolbarButton
-								icon={alignCenter}
-								label="Align center"
-								isPressed={currentAlign === "center"}
-								onClick={() => onChangeAlign(currentAlign === "center" ? "" : "center")}
-							/>
-							<ToolbarButton
-								icon={alignRight}
-								label="Align end"
-								isPressed={currentAlign === "end"}
-								onClick={() => onChangeAlign(currentAlign === "end" ? "" : "end")}
-							/>
+							{ALIGNMENT_CONTROLS.map(({ value, icon, label }) => (
+								<ToolbarButton
+									key={value}
+									icon={icon}
+									label={label}
+									isPressed={currentAlign === value}
+									onClick={() => onChangeAlign(currentAlign === value ? "" : value)}
+								/>
+							))}
 							<ToolbarButton
 								icon={closeSmall}
 								label="Clear alignment"

@@ -4,7 +4,6 @@
   "name": "resource-layout-blocks-2/column",
   "title": "Column",
   "category": "resource-layout-blocks-2",
-  "icon": "columns",
   "description": "A column that holds content blocks.",
   "supports": {
     "html": false

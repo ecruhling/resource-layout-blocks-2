@@ -73,6 +73,7 @@ SM, MD, LG, etc, tabs
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
+	width: 100%;
 }
 
 .resource-panel-dot {
@@ -81,4 +82,21 @@ SM, MD, LG, etc, tabs
 	border-radius: 999px;
 	background: currentColor;
 	opacity: 0.75;
+}
+
+.resource-panel-clear {
+	margin-left: auto;
+	min-width: 20px;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	opacity: 0.65;
+}
+
+.resource-panel-clear:hover {
+	opacity: 1;
+}
+
+.resource-panel-clear:disabled {
+	opacity: 0.25;
 }
