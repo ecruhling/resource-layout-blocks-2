@@ -5,6 +5,11 @@
   "title": "Column",
   "category": "resource-layout-blocks-2",
   "description": "A column that holds content blocks.",
+  "attributes": {
+    "inlineStyles": {
+      "type": "string"
+    }
+  },
   "supports": {
     "html": false
   },
