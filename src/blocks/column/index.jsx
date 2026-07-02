@@ -7,7 +7,7 @@ registerBlockType(metadata.name, {
     ...metadata,
 	icon: icons.column,
     edit() {
-        const props = useBlockProps({ className: "my-layout-column" });
+        const props = useBlockProps({ className: "col resource-layout-blocks-2-column" });
         return (
             <div {...props}>
                 <InnerBlocks templateLock={false} />
@@ -15,7 +15,7 @@ registerBlockType(metadata.name, {
         );
     },
     save() {
-        const props = useBlockProps.save({ className: "my-layout-column" });
+        const props = useBlockProps.save({ className: "col resource-layout-blocks-2-column" });
         return (
             <div {...props}>
                 <InnerBlocks.Content />
