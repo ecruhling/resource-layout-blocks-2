@@ -71,7 +71,7 @@ export default function BootstrapSpacingPanelBody({
 					onClear={onClearSpacing}
 				/>
 			}
-			initialOpen={true}
+			initialOpen={false}
 			className={panelBodyClassName}
 		>
 			<PanelRow>

@@ -40,6 +40,12 @@ export function normalizeClassName(className = "") {
 	const orderRe =
 		/^order-(?:(sm|md|lg|xl|xxl)-)?(first|last|[0-5])$/i;
 
+	const columnRe =
+		/^col(?:-(sm|md|lg|xl|xxl))?(?:-(auto|[1-9]|1[0-2]))?$/i;
+
+	const offsetRe =
+		/^offset(?:-(sm|md|lg|xl|xxl))?-([1-9]|1[0-2])$/i;
+
 	const seen = new Set();
 	const outReversed = [];
 
@@ -184,6 +190,28 @@ export function normalizeClassName(className = "") {
 		if (orderMatch) {
 			const bp = (orderMatch[1] || "").toLowerCase();
 			const key = `bs-order:${bp}`;
+			if (!seen.has(key)) {
+				seen.add(key);
+				outReversed.push(token);
+			}
+			continue;
+		}
+
+		const columnMatch = token.match(columnRe);
+		if (columnMatch) {
+			const bp = (columnMatch[1] || "").toLowerCase();
+			const key = `bs-column:${bp}`;
+			if (!seen.has(key)) {
+				seen.add(key);
+				outReversed.push(token);
+			}
+			continue;
+		}
+
+		const offsetMatch = token.match(offsetRe);
+		if (offsetMatch) {
+			const bp = (offsetMatch[1] || "").toLowerCase();
+			const key = `bs-offset:${bp}`;
 			if (!seen.has(key)) {
 				seen.add(key);
 				outReversed.push(token);

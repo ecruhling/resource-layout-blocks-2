@@ -36,6 +36,12 @@ import {
 	clearBootstrapFlexItemBreakpoint,
 } from "../utils/classname-bootstrap-flex-item";
 
+import {
+	parseBootstrapColumnFromClassName,
+	updateBootstrapColumnSlot,
+	clearBootstrapColumnBreakpoint,
+} from "../utils/classname-bootstrap-column";
+
 import {normalizeClassName} from "../utils/normalize-classname";
 
 import BootstrapSpacingPanelBody from "./panels/BootstrapSpacingPanelBody";
@@ -43,6 +49,7 @@ import BootstrapAlignmentPanelBody from "./panels/BootstrapAlignmentPanelBody";
 import BootstrapDisplayPanelBody from "./panels/BootstrapDisplayPanelBody";
 import BootstrapFlexPanelBody from "./panels/BootstrapFlexPanelBody";
 import BootstrapFlexItemPanelBody from "./panels/BootstrapFlexItemPanelBody";
+import BootstrapColumnPanelBody from "./panels/BootstrapColumnPanelBody";
 
 const TABS = [
 	{name: "", label: "-"},
@@ -57,6 +64,7 @@ const SPACING_TYPES = ["p", "m"];
 const SPACING_SIDES = ["", "t", "b", "s", "e"];
 const FLEX_SETTINGS = ["direction", "wrap", "justify", "alignItems", "alignContent"];
 const FLEX_ITEM_SETTINGS = ["grow", "shrink", "alignSelf", "order"];
+const COLUMN_SETTINGS = ["columns", "offset"];
 
 function hasValue(value) {
 	return value !== null && value !== undefined && value !== "";
@@ -77,7 +85,7 @@ function bpHasAnySetting(map, bp, settings) {
 	return !!current && settings.some((setting) => hasValue(current?.[setting]));
 }
 
-export default function ClassNameAndBootstrapControls({className, setClassName}) {
+export default function ClassNameAndBootstrapControls({className, setClassName, showColumnControls = false}) {
 	const parsedSpacing = useMemo(
 		() => parseBootstrapSpacingFromClassName(className),
 		[className]
@@ -103,6 +111,11 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 		[className]
 	);
 
+	const columnMap = useMemo(
+		() => parseBootstrapColumnFromClassName(className),
+		[className]
+	);
+
 	const tabsWithIndicators = useMemo(() => {
 		return TABS.map((t) => {
 			const modified =
@@ -110,7 +123,8 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 				bpHasTextAlign(alignMap, t.name) ||
 				!!displayMap?.[t.name] ||
 				bpHasAnySetting(flexMap, t.name, FLEX_SETTINGS) ||
-				bpHasAnySetting(flexItemMap, t.name, FLEX_ITEM_SETTINGS);
+				bpHasAnySetting(flexItemMap, t.name, FLEX_ITEM_SETTINGS) ||
+				(showColumnControls && bpHasAnySetting(columnMap, t.name, COLUMN_SETTINGS));
 
 			return {
 				name: t.name,
@@ -127,7 +141,7 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 				),
 			};
 		});
-	}, [parsedSpacing, alignMap, displayMap, flexMap, flexItemMap]);
+	}, [parsedSpacing, alignMap, displayMap, flexMap, flexItemMap, columnMap, showColumnControls]);
 
 	const setSpacingSlot = (type, bp, side, nextVal) => {
 		const val = nextVal === "" ? null : nextVal;
@@ -152,6 +166,11 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 
 	const setFlexItemSlot = (bp, setting, nextVal) => {
 		const next = updateBootstrapFlexItemSlot(className || "", bp, setting, nextVal);
+		setClassName(normalizeClassName(next));
+	};
+
+	const setColumnSlot = (bp, setting, nextVal) => {
+		const next = updateBootstrapColumnSlot(className || "", bp, setting, nextVal);
 		setClassName(normalizeClassName(next));
 	};
 
@@ -181,6 +200,11 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 
 	const clearFlexItemSlot = (bp) => {
 		const next = clearBootstrapFlexItemBreakpoint(className || "", bp);
+		setClassName(normalizeClassName(next));
+	};
+
+	const clearColumnSlot = (bp) => {
+		const next = clearBootstrapColumnBreakpoint(className || "", bp);
 		setClassName(normalizeClassName(next));
 	};
 
@@ -224,9 +248,19 @@ export default function ClassNameAndBootstrapControls({className, setClassName})
 						const currentDisplay = displayMap?.[bp] ?? "";
 						const currentFlex = flexMap?.[bp] ?? {};
 						const currentFlexItem = flexItemMap?.[bp] ?? {};
+						const currentColumn = columnMap?.[bp] ?? {};
 
 						return (
 							<Panel key={bp || "base"}>
+								{showColumnControls && (
+									<BootstrapColumnPanelBody
+										bpLabel={bpLabel}
+										currentColumn={currentColumn}
+										onChangeColumn={(setting, value) => setColumnSlot(bp, setting, value)}
+										onClearColumn={() => clearColumnSlot(bp)}
+									/>
+								)}
+
 								<BootstrapSpacingPanelBody
 									bp={bp}
 									bpLabel={bpLabel}

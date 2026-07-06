@@ -18,13 +18,17 @@ export default ({attributes, setAttributes}) => {
 	};
 
 	const blockProps = useBlockProps({
-		className: `resource-layout-blocks-2-column ${className}`.trim(),
+		className: `${className}`.trim(),
 		style: convertStylesStringToObject(inlineStyles),
 	});
 
 	return (
 		<>
-			<ClassNameAndBootstrapControls className={className} setClassName={setClassName}/>
+			<ClassNameAndBootstrapControls
+				className={className}
+				setClassName={setClassName}
+				showColumnControls={true}
+			/>
 			<InspectorControls group="advanced">
 				<TextControl
 					__nextHasNoMarginBottom
