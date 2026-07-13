@@ -22,7 +22,7 @@ export default ({attributes, setAttributes}) => {
 	};
 
 	const blockProps = useBlockProps({
-		className: `row resource-layout-blocks-2-row ${className}`.trim(),
+		className: `row rlb2-row ${className}`.trim(),
 		style: convertStylesStringToObject(inlineStyles),
 	});
 

@@ -8,7 +8,7 @@ export default ({attributes}) => {
 	} = attributes;
 
 	const blockProps = useBlockProps.save({
-		className: `row resource-layout-blocks-2-row ${className}`.trim(),
+		className: `row rlb2-row ${className}`.trim(),
 		style: convertStylesStringToObject(inlineStyles),
 	});
 

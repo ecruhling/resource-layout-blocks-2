@@ -55,7 +55,7 @@ add_action('enqueue_block_editor_assets', function () {
 	}
 
 	wp_enqueue_style(
-		'resource-layout-blocks-2-editor-styles',
+		'rlb2-editor-styles',
 		plugins_url('dist/editor.css', __FILE__),
 		array(),
 		filemtime($css_path)

@@ -51,7 +51,7 @@ export default ({attributes, setAttributes}) => {
 	const containerClass = isFluid ? "container-fluid" : "container";
 
 	const blockProps = useBlockProps({
-		className: `${containerClass} resource-layout-blocks-2-container ${className}`.trim(),
+		className: `${containerClass} rlb2-container ${className}`.trim(),
 		style: convertStylesStringToObject(inlineStyles),
 	});
 

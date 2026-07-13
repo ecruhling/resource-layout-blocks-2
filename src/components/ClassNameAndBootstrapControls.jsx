@@ -1,4 +1,4 @@
-import {useMemo} from "@wordpress/element";
+import {useEffect, useMemo, useState} from "@wordpress/element";
 import {BlockControls, InspectorControls} from "@wordpress/block-editor";
 import {
 	Panel,
@@ -86,6 +86,16 @@ function bpHasAnySetting(map, bp, settings) {
 }
 
 export default function ClassNameAndBootstrapControls({className, setClassName, showColumnControls = false}) {
+	const currentClassName = className || "";
+	const [toolbarClassName, setToolbarClassName] = useState(currentClassName);
+	const [isEditingToolbarClassName, setIsEditingToolbarClassName] = useState(false);
+
+	useEffect(() => {
+		if (!isEditingToolbarClassName) {
+			setToolbarClassName(currentClassName);
+		}
+	}, [currentClassName, isEditingToolbarClassName]);
+
 	const parsedSpacing = useMemo(
 		() => parseBootstrapSpacingFromClassName(className),
 		[className]
@@ -208,6 +218,21 @@ export default function ClassNameAndBootstrapControls({className, setClassName, 
 		setClassName(normalizeClassName(next));
 	};
 
+	const stopToolbarKeyPropagation = (event) => {
+		event.stopPropagation();
+	};
+
+	const setToolbarClassNameValue = (next) => {
+		setToolbarClassName(next);
+		setClassName(next);
+	};
+
+	const commitToolbarClassNameValue = (value) => {
+		const next = normalizeClassName(value);
+		setToolbarClassName(next);
+		setClassName(next);
+	};
+
 	return (
 		<>
 			{/* Always-visible toolbar class editor */}
@@ -226,9 +251,15 @@ export default function ClassNameAndBootstrapControls({className, setClassName, 
 						<span style={{fontSize: 11, whiteSpace: "nowrap"}}>.cx</span>
 						<div style={{minWidth: 250, maxWidth: 500}}>
 							<TextControl
-								value={className || ""}
-								onChange={(v) => setClassName(v)}
-								onBlur={(e) => setClassName(normalizeClassName(e.target.value))}
+								value={toolbarClassName}
+								onChange={setToolbarClassNameValue}
+								onFocus={() => setIsEditingToolbarClassName(true)}
+								onBlur={(e) => {
+									setIsEditingToolbarClassName(false);
+									commitToolbarClassNameValue(e.target.value);
+								}}
+								onKeyDown={stopToolbarKeyPropagation}
+								onKeyUp={stopToolbarKeyPropagation}
 								aria-label="CSS classes"
 							/>
 						</div>

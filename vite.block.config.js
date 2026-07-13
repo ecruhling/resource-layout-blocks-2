@@ -11,10 +11,6 @@ const wpExternals = {
 
 export default defineConfig({
     plugins: [react({ jsxRuntime: "classic" })],
-    esbuild: {
-        jsxFactory: "wp.element.createElement",
-        jsxFragment: "wp.element.Fragment",
-    },
     build: {
         rollupOptions: {
             external: Object.keys(wpExternals),
