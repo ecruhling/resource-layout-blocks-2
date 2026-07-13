@@ -53,14 +53,20 @@ function hasAnyColumnSetting(currentColumn = {}) {
 
 export default function BootstrapColumnPanelBody({
 													 bpLabel,
+													 isBaseBreakpoint = false,
 													 currentColumn,
 													 onChangeColumn,
 													 onClearColumn,
 													 panelBodyClassName = "resource-panel-body",
 													 cardHeaderClassName = "resource-card-header",
-													 selectMinWidth = "190px",
+													 selectMinWidth = "50px",
+													 selectMaxWidth = "100px",
 												 }) {
 	const isModified = hasAnyColumnSetting(currentColumn);
+	const columnOptions = isBaseBreakpoint
+		? COLUMN_OPTIONS.filter(({value}) => value !== "")
+		: COLUMN_OPTIONS;
+	const currentColumns = currentColumn?.columns || (isBaseBreakpoint ? "equal" : "");
 
 	return (
 		<PanelBody
@@ -88,18 +94,18 @@ export default function BootstrapColumnPanelBody({
 					</CardHeader>
 
 					<CardBody size="small">
-						<Flex wrap={true} direction="column" gap={3}>
-							<FlexItem style={{minWidth: selectMinWidth}}>
+						<Flex wrap={true} direction="row" gap={3}>
+							<FlexItem style={{minWidth: selectMinWidth, maxWidth: selectMaxWidth}}>
 								<SelectControl
 									__next40pxDefaultSize
 									size="compact"
-									label="Number of columns"
-									value={currentColumn?.columns ?? ""}
-									options={COLUMN_OPTIONS}
+									label="Columns"
+									value={currentColumns}
+									options={columnOptions}
 									onChange={(value) => onChangeColumn("columns", value)}
 								/>
 							</FlexItem>
-							<FlexItem style={{minWidth: selectMinWidth}}>
+							<FlexItem style={{minWidth: selectMinWidth, maxWidth: selectMaxWidth}}>
 								<SelectControl
 									__next40pxDefaultSize
 									size="compact"

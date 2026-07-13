@@ -255,6 +255,7 @@ export default function ClassNameAndBootstrapControls({className, setClassName, 
 								{showColumnControls && (
 									<BootstrapColumnPanelBody
 										bpLabel={bpLabel}
+										isBaseBreakpoint={bp === ""}
 										currentColumn={currentColumn}
 										onChangeColumn={(setting, value) => setColumnSlot(bp, setting, value)}
 										onClearColumn={() => clearColumnSlot(bp)}

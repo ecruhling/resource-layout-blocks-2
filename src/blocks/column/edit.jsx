@@ -2,6 +2,7 @@ import {__} from "@wordpress/i18n";
 import {InnerBlocks, InspectorControls, useBlockProps} from "@wordpress/block-editor";
 import {TextControl} from "@wordpress/components";
 import {convertStylesStringToObject} from "../../utils/convert-styles-string-to-object.js";
+import {getBootstrapColumnClassName} from "../../utils/classname-bootstrap-column.js";
 import ClassNameAndBootstrapControls from "../../components/ClassNameAndBootstrapControls.jsx";
 
 export default ({attributes, setAttributes}) => {
@@ -16,16 +17,17 @@ export default ({attributes, setAttributes}) => {
 			inlineStyles: value !== "" ? value : undefined,
 		});
 	};
+	const columnClassName = getBootstrapColumnClassName(className);
 
 	const blockProps = useBlockProps({
-		className: `${className}`.trim(),
+		className: columnClassName,
 		style: convertStylesStringToObject(inlineStyles),
 	});
 
 	return (
 		<>
 			<ClassNameAndBootstrapControls
-				className={className}
+				className={columnClassName}
 				setClassName={setClassName}
 				showColumnControls={true}
 			/>

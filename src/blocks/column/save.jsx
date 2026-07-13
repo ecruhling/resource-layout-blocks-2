@@ -1,5 +1,6 @@
 import {InnerBlocks, useBlockProps} from "@wordpress/block-editor";
 import {convertStylesStringToObject} from "../../utils/convert-styles-string-to-object.js";
+import {getBootstrapColumnClassName} from "../../utils/classname-bootstrap-column.js";
 
 export default ({attributes}) => {
 	const {
@@ -8,7 +9,7 @@ export default ({attributes}) => {
 	} = attributes;
 
 	const blockProps = useBlockProps.save({
-		className: `${className}`.trim(),
+		className: getBootstrapColumnClassName(className),
 		style: convertStylesStringToObject(inlineStyles),
 	});
 
