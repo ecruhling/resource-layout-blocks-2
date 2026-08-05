@@ -1,0 +1,11 @@
+{
+    "name": "resource-atlanta/resource-layout-blocks-2",
+    "description": "The standard page layout blocks for containers, rows, and columns.",
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

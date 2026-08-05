@@ -74,20 +74,16 @@ function resource_category( array $block_categories ): array {
 		'icon'  => null, // icon is set in index.js of each block.
 	];
 
-	// Check if the category already exists
-	$exists = false;
-	foreach ( $block_categories as $category ) {
-		if ( isset( $category['slug'] ) && $category['slug'] === $resource_category['slug'] ) {
-			$exists = true;
-			break;
-		}
-	}
+	// Remove an existing copy before moving the category to the start of the list.
+	$block_categories = array_values(
+		array_filter(
+			$block_categories,
+			static function ( array $category ): bool {
+				return ! isset( $category['slug'] ) || RESOURCE_LAYOUT_BLOCKS_2_SLUG !== $category['slug'];
+			}
+		)
+	);
 
-	// Add the category if it doesn't exist
-	if ( ! $exists ) {
-		$block_categories[] = $resource_category;
-	}
-	// move the new category to the start of the block category list.
 	array_unshift( $block_categories, $resource_category );
 
 	return $block_categories;
